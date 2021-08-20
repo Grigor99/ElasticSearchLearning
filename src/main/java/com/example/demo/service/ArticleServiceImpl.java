@@ -153,4 +153,24 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.save(article);
         return article;
     }
+
+    @Override
+    public List<String> getAll() {
+        QueryBuilder queryBuilder = QueryBuilders
+                .matchAllQuery();
+        Query searchQuery = new NativeSearchQueryBuilder()
+                .withFilter(queryBuilder)
+                .build();
+        SearchHits<Article> searchSuggestions =
+                elasticsearchOperations.search(searchQuery,
+                        Article.class,
+                        IndexCoordinates.of("blog"));
+
+        List<String> suggestions = new ArrayList<String>();
+
+        searchSuggestions.getSearchHits().forEach(searchHit -> {
+            suggestions.add(searchHit.getContent().getTitle());
+        });
+        return suggestions;
+    }
 }

@@ -20,4 +20,6 @@ public interface ArticleService {
     List<Article> processSearch(String query);
 
     Article addDoc(ArticleDto dto);
+
+    List<String> getAll();
 }

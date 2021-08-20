@@ -47,6 +47,12 @@ public class Controller {
         return ResponseEntity.ok(articleService.processSearch(title));
     }
 
+    @GetMapping("/6")
+    public ResponseEntity<?> getAll() {
+        return ResponseEntity.ok(articleService.getAll());
+    }
+
+
 
     @PostMapping
     public ResponseEntity<?> addDoc(@RequestBody ArticleDto articleDto) {

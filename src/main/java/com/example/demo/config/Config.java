@@ -11,6 +11,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 
 @Configuration
+@ComponentScan(basePackages = { "com.example.demo" })
 public class Config {
 
     @Bean
