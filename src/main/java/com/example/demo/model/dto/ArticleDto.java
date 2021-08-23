@@ -13,4 +13,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class ArticleDto implements Serializable {
     private String title;
+    private String ages;
+    private Double salary;
+    private String unit;
 }

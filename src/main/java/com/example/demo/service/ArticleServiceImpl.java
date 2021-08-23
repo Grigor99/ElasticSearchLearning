@@ -153,6 +153,9 @@ public class ArticleServiceImpl implements ArticleService {
     public Article addDoc(ArticleDto dto) {
         Article article = new Article();
         article.setTitle(dto.getTitle());
+        article.setAges(dto.getAges());
+        article.setUnit(dto.getUnit());
+        article.setSalary(dto.getSalary());
         articleRepository.save(article);
         return article;
     }
@@ -175,5 +178,11 @@ public class ArticleServiceImpl implements ArticleService {
             suggestions.add(searchHit.getContent().getTitle());
         });
         return suggestions;
+    }
+
+    @Override
+    public boolean createIndex() {
+        boolean cr = elasticsearchOperations.indexOps(Article.class).create();
+        return cr;
     }
 }

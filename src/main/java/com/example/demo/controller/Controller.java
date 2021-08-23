@@ -53,9 +53,13 @@ public class Controller {
     }
 
 
-
     @PostMapping
     public ResponseEntity<?> addDoc(@RequestBody ArticleDto articleDto) {
         return ResponseEntity.ok(articleService.addDoc(articleDto));
+    }
+
+    @GetMapping("/get/1")
+    public ResponseEntity<?> createIndex() {
+        return ResponseEntity.ok(articleService.createIndex());
     }
 }

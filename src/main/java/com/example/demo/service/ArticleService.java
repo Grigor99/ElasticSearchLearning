@@ -22,4 +22,6 @@ public interface ArticleService {
     Article addDoc(ArticleDto dto);
 
     List<String> getAll();
+
+    boolean createIndex();
 }

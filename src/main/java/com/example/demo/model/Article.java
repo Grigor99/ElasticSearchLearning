@@ -9,16 +9,24 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
-@Document(indexName = "blog", type = "article")
+@Document(indexName = "blog")
 public class Article {
 
     @Id
     private String id;
 
+    @Field(type = FieldType.Text)
     private String title;
+    @Field(type = FieldType.Text)
+    private String unit;
+    @Field(type = FieldType.Text)
+    private String ages;
+    @Field(type = FieldType.Double)
+    private Double salary;
 
 }
