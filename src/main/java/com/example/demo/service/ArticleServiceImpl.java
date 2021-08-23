@@ -5,6 +5,7 @@ import com.example.demo.model.dto.ArticleDto;
 import com.example.demo.repo.ArticleRepository;
 import org.elasticsearch.common.recycler.Recycler;
 import org.elasticsearch.common.unit.Fuzziness;
+import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
@@ -51,7 +52,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> getByTitleQueryBuilder(String title) {
         QueryBuilder queryBuilder = QueryBuilders
-                .matchQuery("title", title);
+                .matchQuery("title", title)
+                .fuzziness(Fuzziness.AUTO)
+                .prefixLength(3);//first 3 must match exactly
 
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder)
@@ -67,7 +70,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> getByCustom() {
-        Query searchQuery = new StringQuery("{\"query_string\":{\"query\":\"take\" ,\"default_field\":\"title\"}}");
+        Query searchQuery = new StringQuery("{\"query_string\":{\"query\":\"take OR war\" ,\"default_field\":\"title\"}}");
         SearchHits<Article> searchHits = elasticsearchOperations.search(searchQuery, Article.class, IndexCoordinates.of("blog"));
         Iterator<SearchHit<Article>> iterator = searchHits.stream().iterator();
         List<Article> list = new ArrayList<>();
