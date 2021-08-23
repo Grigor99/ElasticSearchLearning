@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.Article;
 import com.example.demo.model.dto.ArticleDto;
 import com.example.demo.model.dto.search.ArticleSearch;
+import com.example.demo.model.dto.search.Response;
 
 import java.util.List;
 
@@ -26,5 +27,5 @@ public interface ArticleService {
 
     boolean createIndex();
 
-    List<Article> searchByFields(ArticleSearch search);
+    Response searchByFields(ArticleSearch search);
 }

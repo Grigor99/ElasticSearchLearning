@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.Article;
 import com.example.demo.model.dto.ArticleDto;
 import com.example.demo.model.dto.search.ArticleSearch;
+import com.example.demo.model.dto.search.Response;
 import com.example.demo.repo.ArticleRepository;
 import org.elasticsearch.common.recycler.Recycler;
 import org.elasticsearch.common.unit.Fuzziness;
@@ -12,6 +13,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.ReactiveSearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -188,21 +190,29 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Article> searchByFields(ArticleSearch search) {
-//        Criteria criteria1= new Criteria("unit").contains("dfd");
+    public Response searchByFields(ArticleSearch search) {
+//       Criteria criteria1= new Criteria("unit").contains("dfd");
 //        Criteria criteria = new Criteria("title").is("tit").or("title").is("ffd").and(criteria1);
-
-        QueryBuilder unitQuery =
-                QueryBuilders
-                        .matchPhraseQuery("unit", search.getUnit());
-        QueryBuilder titleQuery =
-                QueryBuilders
-                        .multiMatchQuery(search.getKeyword(), "title")
-                        .fuzziness(Fuzziness.AUTO)
-                        .prefixLength(2);
-        QueryBuilder salaryQuery =
-                QueryBuilders
-                        .termQuery("salary", search.getSalary());
+        QueryBuilder unitQuery = null;
+        if (search.getUnit() != null) {
+            unitQuery =
+                    QueryBuilders
+                            .matchPhraseQuery("unit", search.getUnit());
+        }
+        QueryBuilder titleQuery = null;
+        if (search.getKeyword() != null) {
+            titleQuery =
+                    QueryBuilders
+                            .multiMatchQuery(search.getKeyword(), "title")
+                            .fuzziness(Fuzziness.AUTO)
+                            .prefixLength(2);
+        }
+        QueryBuilder salaryQuery = null;
+        if (search.getSalary() != null) {
+            salaryQuery =
+                    QueryBuilders
+                            .termQuery("salary", search.getSalary());
+        }
 
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(titleQuery)
@@ -210,6 +220,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .withFilter(salaryQuery)
                 .withPageable(PageRequest.of(0, 10))
                 .build();
+
 
         SearchHits<Article> productHits =
                 elasticsearchOperations
@@ -220,7 +231,9 @@ public class ArticleServiceImpl implements ArticleService {
         productHits.forEach(searchHit -> {
             productMatches.add(searchHit.getContent());
         });
-        return productMatches;
+        Response response = new Response(productMatches.size(), productMatches);
+
+        return response;
 
     }
 }
