@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Article;
 import com.example.demo.model.dto.ArticleDto;
+import com.example.demo.model.dto.search.ArticleSearch;
 import com.example.demo.service.ArticleService;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.http.ResponseEntity;
@@ -61,5 +62,10 @@ public class Controller {
     @GetMapping("/get/1")
     public ResponseEntity<?> createIndex() {
         return ResponseEntity.ok(articleService.createIndex());
+    }
+
+    @PostMapping("/get/special")
+    public ResponseEntity<?> getF(@RequestBody ArticleSearch search) {
+        return ResponseEntity.ok(articleService.searchByFields(search));
     }
 }

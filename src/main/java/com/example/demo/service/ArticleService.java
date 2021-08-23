@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.Article;
 import com.example.demo.model.dto.ArticleDto;
+import com.example.demo.model.dto.search.ArticleSearch;
 
 import java.util.List;
 
@@ -21,7 +22,9 @@ public interface ArticleService {
 
     Article addDoc(ArticleDto dto);
 
-    List<String> getAll();
+    List<Article> getAll();
 
     boolean createIndex();
+
+    List<Article> searchByFields(ArticleSearch search);
 }

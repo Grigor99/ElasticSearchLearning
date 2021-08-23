@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.Article;
 import com.example.demo.model.dto.ArticleDto;
+import com.example.demo.model.dto.search.ArticleSearch;
 import com.example.demo.repo.ArticleRepository;
 import org.elasticsearch.common.recycler.Recycler;
 import org.elasticsearch.common.unit.Fuzziness;
@@ -161,7 +162,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<String> getAll() {
+    public List<Article> getAll() {
         QueryBuilder queryBuilder = QueryBuilders
                 .matchAllQuery();
         Query searchQuery = new NativeSearchQueryBuilder()
@@ -172,10 +173,10 @@ public class ArticleServiceImpl implements ArticleService {
                         Article.class,
                         IndexCoordinates.of("blog"));
 
-        List<String> suggestions = new ArrayList<String>();
+        List<Article> suggestions = new ArrayList<Article>();
 
         searchSuggestions.getSearchHits().forEach(searchHit -> {
-            suggestions.add(searchHit.getContent().getTitle());
+            suggestions.add(searchHit.getContent());
         });
         return suggestions;
     }
@@ -184,5 +185,42 @@ public class ArticleServiceImpl implements ArticleService {
     public boolean createIndex() {
         boolean cr = elasticsearchOperations.indexOps(Article.class).create();
         return cr;
+    }
+
+    @Override
+    public List<Article> searchByFields(ArticleSearch search) {
+//        Criteria criteria1= new Criteria("unit").contains("dfd");
+//        Criteria criteria = new Criteria("title").is("tit").or("title").is("ffd").and(criteria1);
+
+        QueryBuilder unitQuery =
+                QueryBuilders
+                        .matchPhraseQuery("unit", search.getUnit());
+        QueryBuilder titleQuery =
+                QueryBuilders
+                        .multiMatchQuery(search.getKeyword(), "title")
+                        .fuzziness(Fuzziness.AUTO)
+                        .prefixLength(2);
+        QueryBuilder salaryQuery =
+                QueryBuilders
+                        .termQuery("salary", search.getSalary());
+
+        Query searchQuery = new NativeSearchQueryBuilder()
+                .withQuery(titleQuery)
+                .withFilter(unitQuery)
+                .withFilter(salaryQuery)
+                .withPageable(PageRequest.of(0, 10))
+                .build();
+
+        SearchHits<Article> productHits =
+                elasticsearchOperations
+                        .search(searchQuery, Article.class,
+                                IndexCoordinates.of("blog"));
+
+        List<Article> productMatches = new ArrayList<Article>();
+        productHits.forEach(searchHit -> {
+            productMatches.add(searchHit.getContent());
+        });
+        return productMatches;
+
     }
 }
