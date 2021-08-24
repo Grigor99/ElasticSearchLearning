@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 import static org.elasticsearch.index.query.QueryBuilders.regexpQuery;
 
 @Service
@@ -236,4 +237,6 @@ public class ArticleServiceImpl implements ArticleService {
         return response;
 
     }
+
+
 }
