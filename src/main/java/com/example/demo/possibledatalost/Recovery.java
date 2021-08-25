@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 
 @Configuration
 @EnableScheduling
-public class Manager {
+public class Recovery {
 
     private TransferHistoryService transferHistoryService;
     private TransferDbHistoryRepository transferDbHistoryRepository;
 
-    public Manager(TransferHistoryService transferHistoryService, TransferDbHistoryRepository transferDbHistoryRepository) {
+    public Recovery(TransferHistoryService transferHistoryService, TransferDbHistoryRepository transferDbHistoryRepository) {
         this.transferHistoryService = transferHistoryService;
         this.transferDbHistoryRepository = transferDbHistoryRepository;
     }
