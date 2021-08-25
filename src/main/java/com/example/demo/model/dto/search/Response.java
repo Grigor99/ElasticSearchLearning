@@ -1,9 +1,7 @@
 package com.example.demo.model.dto.search;
 
-import com.example.demo.model.Article;
-import lombok.AllArgsConstructor;
+import com.example.demo.model.elastic.Article;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;

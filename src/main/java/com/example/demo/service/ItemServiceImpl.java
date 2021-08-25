@@ -1,42 +1,40 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Article;
-import com.example.demo.model.Item;
+import com.example.demo.jparepo.ItemDbRepo;
+import com.example.demo.model.db.ItemDbEntity;
 import com.example.demo.model.dto.ItemDto;
+import com.example.demo.model.elastic.Item;
 import com.example.demo.model.dto.ItemUpdateDto;
-import com.example.demo.model.dto.search.ItemSearch;
 import com.example.demo.repo.ItemRepository;
-import org.elasticsearch.common.unit.Fuzziness;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 @Service
 public class ItemServiceImpl implements ItemService {
     private ItemRepository itemRepository;
+    private ItemDbRepo dbRepo;
     private ElasticsearchOperations elasticsearchOperations;
 
-    public ItemServiceImpl(ItemRepository itemRepository, ElasticsearchOperations elasticsearchOperations) {
+    public ItemServiceImpl(ItemRepository itemRepository, ItemDbRepo dbRepo, ElasticsearchOperations elasticsearchOperations) {
         this.itemRepository = itemRepository;
+        this.dbRepo = dbRepo;
         this.elasticsearchOperations = elasticsearchOperations;
     }
 
-//    @Override
-//    public Item addDoc(ItemDto dto) {
-//        Item item = new Item(dto.getName(), dto.getDescription(), dto.getQuantity(), dto.getPrice(), dto.getFirm());
-//        itemRepository.save(item);
-//        return item;
-//    }
+    @Override
+    public Item addDoc(ItemDto dto) {
+        Item item = new Item(dto.getName(), dto.getDescription(), dto.getQuantity(), dto.getPrice(), dto.getFirm());
+        itemRepository.save(item);
+        ItemDbEntity dbEntity = new ItemDbEntity(item.getId(), 1, item.getName(), item.getDescription(), item.getQuantity()
+                , item.getPrice(), item.getFirm());
+        dbEntity.setRemoved(false);
+        dbRepo.save(dbEntity);
+        return item;
+    }
 
 //    @Override
 //    public List<Item> search(ItemSearch search) {
@@ -170,12 +168,22 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemRepository.findById(id).get();
         item.setDescription(dto.getDescription());
         item.setPrice(dto.getPrice());
-        return itemRepository.save(item);
+        Item savedItem = itemRepository.save(item);
+        ItemDbEntity dbEntity = dbRepo.findByElasticIdAndRemovedFalse(id);
+        dbEntity.setDescription(dto.getDescription());
+        dbEntity.setPrice(dto.getPrice());
+        dbEntity.setScore(dbEntity.getScore() + 1);
+        dbRepo.save(dbEntity);
+        return savedItem;
     }
 
     @Override
     public void delete(String id) {
         Item item = itemRepository.findById(id).get();
         itemRepository.delete(item);
+        ItemDbEntity dbEntity = dbRepo.findByElasticIdAndRemovedFalse(id);
+        dbEntity.setRemoved(true);
+        dbEntity.setScore(dbEntity.getScore() + 1);
+        dbRepo.save(dbEntity);
     }
 }

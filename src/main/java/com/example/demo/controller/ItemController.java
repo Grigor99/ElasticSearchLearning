@@ -17,10 +17,10 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-//    @PostMapping
-//    public ResponseEntity<?> addDoc(@RequestBody ItemDto dto) {
-//        return ResponseEntity.ok(itemService.addDoc(dto));
-//    }
+    @PostMapping
+    public ResponseEntity<?> addDoc(@RequestBody ItemDto dto) {
+        return ResponseEntity.ok(itemService.addDoc(dto));
+    }
 
 //    @PostMapping("/search")
 //    public ResponseEntity<?> search(@RequestBody ItemSearch search) {

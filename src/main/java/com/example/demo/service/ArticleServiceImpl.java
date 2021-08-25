@@ -1,19 +1,15 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Article;
+import com.example.demo.model.elastic.Article;
 import com.example.demo.model.dto.ArticleDto;
 import com.example.demo.model.dto.search.ArticleSearch;
 import com.example.demo.model.dto.search.Response;
 import com.example.demo.repo.ArticleRepository;
-import org.elasticsearch.common.recycler.Recycler;
 import org.elasticsearch.common.unit.Fuzziness;
-import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.ReactiveSearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
@@ -24,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 import static org.elasticsearch.index.query.QueryBuilders.regexpQuery;
 
 @Service

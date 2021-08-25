@@ -1,6 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Article;
+import com.example.demo.model.elastic.Article;
 import com.example.demo.model.dto.ArticleDto;
 import com.example.demo.model.dto.search.ArticleSearch;
 import com.example.demo.model.dto.search.Response;

@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Article;
 import com.example.demo.model.dto.ArticleDto;
 import com.example.demo.model.dto.search.ArticleSearch;
 import com.example.demo.service.ArticleService;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

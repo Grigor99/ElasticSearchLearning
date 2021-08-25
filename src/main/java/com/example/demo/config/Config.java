@@ -24,6 +24,7 @@ import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfig
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.HttpHeaders;
 
 import javax.net.ssl.KeyManager;
@@ -37,7 +38,6 @@ import java.security.cert.CertificateException;
 import java.util.Base64;
 
 @Configuration
-@ComponentScan(basePackages = {"com.example.demo"})
 @EnableElasticsearchRepositories(basePackages = {"com.example.demo.repo"})
 public class Config {
 

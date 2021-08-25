@@ -1,13 +1,14 @@
 package com.example.demo.service;
 
-import com.example.demo.model.Item;
 import com.example.demo.model.dto.ItemDto;
+import com.example.demo.model.elastic.Item;
 import com.example.demo.model.dto.ItemUpdateDto;
-import com.example.demo.model.dto.search.ItemSearch;
 
 import java.util.List;
 
 public interface ItemService {
+    Item addDoc(ItemDto dto);
+
     List<Item> getByNameAndDesc(String name, String desc);
 
     List<Item> getByNameOrDesc(String name, String desc);
