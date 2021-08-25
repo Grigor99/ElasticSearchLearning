@@ -46,7 +46,7 @@ public class Recovery {
                     transferDbHistoryRepository.save(dbHistory);
 //                    transferDbHistoryRepository.delete(dbHistory);
                 }
-                System.out.println("data lost happened and saved back again");
+                System.out.println("data lost happened and recovered again");
             }
             System.out.println("finish");
 
