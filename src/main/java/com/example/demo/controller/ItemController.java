@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.dto.ItemDto;
+import com.example.demo.model.dto.ItemUpdateDto;
 import com.example.demo.model.dto.search.ItemSearch;
 import com.example.demo.service.ItemService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +51,16 @@ public class ItemController {
         return ResponseEntity.ok(itemService.getByPrice(from, to));
     }
 
+    @PutMapping("/up/{id}")
+    public ResponseEntity<?> update(@PathVariable String id,
+                                    @RequestBody ItemUpdateDto dto) {
+        return ResponseEntity.ok(itemService.updateDoc(id,dto));
+    }
 
-
+    @DeleteMapping("/del/{id}")
+    public ResponseEntity<?> delete(@PathVariable String id) {
+        itemService.delete(id);
+        return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+    }
 
 }

@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.Article;
 import com.example.demo.model.Item;
 import com.example.demo.model.dto.ItemDto;
+import com.example.demo.model.dto.ItemUpdateDto;
 import com.example.demo.model.dto.search.ItemSearch;
 import com.example.demo.repo.ItemRepository;
 import org.elasticsearch.common.unit.Fuzziness;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -144,20 +148,34 @@ public class ItemServiceImpl implements ItemService {
     public List<Item> getByNameAndDesc(String name, String desc) {
         return itemRepository.findByNameAndDescription(name, desc);
     }
+
     @Override
     public List<Item> getByNameOrDesc(String name, String desc) {
         return itemRepository.findByNameOrDescription(name, desc);
     }
+
     @Override
     public List<Item> getByName(String name) {
         return itemRepository.findByName(name);
     }
+
     @Override
     public List<Item> getByPrice(Double p1, Double p2) {
-        return itemRepository.findByPriceBetween(p1,p2);
+        return itemRepository.findByPriceBetween(p1, p2);
     }
 
 
+    @Override
+    public Item updateDoc(String id, ItemUpdateDto dto) {
+        Item item = itemRepository.findById(id).get();
+        item.setDescription(dto.getDescription());
+        item.setPrice(dto.getPrice());
+        return itemRepository.save(item);
+    }
 
-
+    @Override
+    public void delete(String id) {
+        Item item = itemRepository.findById(id).get();
+        itemRepository.delete(item);
+    }
 }

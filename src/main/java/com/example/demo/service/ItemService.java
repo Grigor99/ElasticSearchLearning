@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.model.Item;
 import com.example.demo.model.dto.ItemDto;
+import com.example.demo.model.dto.ItemUpdateDto;
 import com.example.demo.model.dto.search.ItemSearch;
 
 import java.util.List;
@@ -15,6 +16,8 @@ public interface ItemService {
 
     List<Item> getByPrice(Double p1, Double p2);
 
-//    Item addDoc(ItemDto dto);
+
+    Item updateDoc(String id, ItemUpdateDto dto);
+    void delete(String id);
 
 }
