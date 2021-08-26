@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.jparepo.TransferDbHistoryRepository;
 import com.example.demo.model.db.TransferDbHistory;
 import com.example.demo.model.dto.TransferDto;
+import com.example.demo.model.dto.TransferUpdateDto;
 import com.example.demo.model.elastic.Article;
 import com.example.demo.model.elastic.TransfersHistoryDoc;
 import com.example.demo.repo.TransferHistoryDocRepository;
@@ -54,6 +55,24 @@ public class TransferHistoryServiceImpl implements TransferHistoryService {
         dbHistoryRepository.save(dbHistory);
         return saved;
     }
+
+    @Override
+    public TransfersHistoryDoc update(String id, TransferUpdateDto dto) {
+        TransfersHistoryDoc transfersHistoryDoc = docRepository.findById(id).get();
+        transfersHistoryDoc.setFrom(dto.getFrom());
+        transfersHistoryDoc.setTo(dto.getTo());
+        transfersHistoryDoc.setHowMuch(dto.getHowMuch());
+
+        TransferDbHistory dbHistory = dbHistoryRepository.findByElasticIdAndRemovedFalse(id);
+        dbHistory.setFrom1(dto.getFrom());
+        dbHistory.setTo1(dto.getTo());
+        dbHistory.setHowMuch(dto.getHowMuch());
+        dbHistory.setScore(dbHistory.getScore() + 1);
+        dbHistoryRepository.save(dbHistory);
+
+        return docRepository.save(transfersHistoryDoc);
+    }
+
     @Override
     public TransfersHistoryDoc recoverDoc(TransferDto dto) {
         TransfersHistoryDoc doc = new TransfersHistoryDoc();
@@ -97,8 +116,6 @@ public class TransferHistoryServiceImpl implements TransferHistoryService {
         });
         return suggestions;
     }
-
-
 
 
 }

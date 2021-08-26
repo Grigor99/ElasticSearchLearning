@@ -1,12 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.dto.TransferDto;
+import com.example.demo.model.dto.TransferUpdateDto;
 import com.example.demo.service.TransferHistoryService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/transfer")
@@ -20,7 +18,15 @@ public class TransferController {
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody TransferDto dto){
+    public ResponseEntity<?> create(@RequestBody TransferDto dto) {
         return ResponseEntity.ok(transferHistoryService.create(dto));
     }
+
+    @PostMapping("/id/{id}")
+    public ResponseEntity<?> update(@PathVariable String id, @RequestBody TransferUpdateDto dto) {
+        return ResponseEntity.ok(transferHistoryService.update(id, dto));
+    }
+
+
+
 }
