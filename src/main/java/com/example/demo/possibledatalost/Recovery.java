@@ -23,6 +23,20 @@ public class Recovery {
         this.transferHistoryService = transferHistoryService;
         this.transferDbHistoryRepository = transferDbHistoryRepository;
     }
+    //    shard = hash(routing) % number_of_primary_shards
+    //never change primary shards number or anything about it!
+    //routing _id
+
+    /*
+
+replication
+The default value for replication is sync. This causes the primary shard to wait for successful responses from the replica shards before returning.
+If you set replication to async, it will return success to the client as soon as the request has been executed on the primary shard. It will still forward the request to the replicas, but you will not know whether the replicas succeeded.
+This option is mentioned specifically to advise against using it. The default sync replication allows Elasticsearch to exert back pressure on whatever system is feeding it with data. With async replication, it is possible to overload Elastic‐ search by sending too many requests without waiting for their completion.
+     */
+
+    //#discovery.seed_hosts: ["7.14.0"] ip address login google cloud create instance then take ip
+    //google cloud create node copy ip and put it in seed hosts
 
     @Scheduled(fixedRate = 1000 * 60 * 60)//an hour
     public void executeTask1() {
