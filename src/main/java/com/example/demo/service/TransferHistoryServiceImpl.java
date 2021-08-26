@@ -91,9 +91,9 @@ public class TransferHistoryServiceImpl implements TransferHistoryService {
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withFilter(queryBuilder)
                 .build();
-        SearchHits<Article> searchSuggestions =
+        SearchHits<TransfersHistoryDoc> searchSuggestions =
                 elasticsearchOperations.search(searchQuery,
-                        Article.class,
+                        TransfersHistoryDoc.class,
                         IndexCoordinates.of("transfer_history"));
         return searchSuggestions.getSearchHits().size();
     }
@@ -105,9 +105,9 @@ public class TransferHistoryServiceImpl implements TransferHistoryService {
         Query searchQuery = new NativeSearchQueryBuilder()
                 .withFilter(queryBuilder)
                 .build();
-        SearchHits<Article> searchSuggestions =
+        SearchHits<TransfersHistoryDoc> searchSuggestions =
                 elasticsearchOperations.search(searchQuery,
-                        Article.class,
+                        TransfersHistoryDoc.class,
                         IndexCoordinates.of("transfer_history"));
         List<String> suggestions = new ArrayList<String>();
 
@@ -116,6 +116,7 @@ public class TransferHistoryServiceImpl implements TransferHistoryService {
         });
         return suggestions;
     }
+
 
 
 }
