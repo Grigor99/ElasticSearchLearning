@@ -117,6 +117,20 @@ public class TransferHistoryServiceImpl implements TransferHistoryService {
         return suggestions;
     }
 
+    @Override
+    public  SearchHits<TransfersHistoryDoc> getAll() {
+        QueryBuilder queryBuilder = QueryBuilders
+                .matchAllQuery();
+        Query searchQuery = new NativeSearchQueryBuilder()
+                .withFilter(queryBuilder)
+                .build();
+        SearchHits<TransfersHistoryDoc> searchSuggestions =
+                elasticsearchOperations.search(searchQuery,
+                        TransfersHistoryDoc.class,
+                        IndexCoordinates.of("transfer_history"));
+        return searchSuggestions;
+    }
+
 
 
 }

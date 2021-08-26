@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.model.dto.TransferDto;
 import com.example.demo.model.dto.TransferUpdateDto;
 import com.example.demo.model.elastic.TransfersHistoryDoc;
+import org.springframework.data.elasticsearch.core.SearchHits;
 
 import java.util.List;
 
@@ -16,4 +17,7 @@ public interface TransferHistoryService {
     Integer getRecordsCount();
 
     List<String> getRecordsIds();
+
+
+    SearchHits<TransfersHistoryDoc> getAll();
 }
